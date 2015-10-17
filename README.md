@@ -1,6 +1,6 @@
 # header-context
 
-*header-context* maintains HTTP headers and makes them available for logging or auditing purposes, and for passing to subsequent requests.
+*header-context* is a Play Framework library for capturing HTTP headers. They can then be accessed for logging or auditing purposes, or for use in subsequent downstream requests.
 
 Configure the ContextPropagatingDispatcher via:
 ```
