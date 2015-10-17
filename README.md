@@ -1,5 +1,7 @@
 # header-context
 
+*header-context* maintains HTTP headers and makes them available for logging or auditing purposes, and for passing to subsequent requests.
+
 Configure the ContextPropagatingDispatcher via:
 ```
 akka {
