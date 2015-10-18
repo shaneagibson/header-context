@@ -16,58 +16,11 @@ class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContext {
 
   "HeaderContext" should {
 
-    def sameThread() =  Action.async {
-      implicit request => {
-        captureHeaders(request.headers)
-        retrieveHeaders().getOrElse("test", "") match {
-          case "same-thread" => Future(Ok(""))
-          case _ => Future(BadRequest(s"test header should be 'same-thread'"))
-        }
-      }
-    }
-
-    def differentThread() = Action.async {
-      implicit request => {
-        captureHeaders(request.headers)
-        Future.successful {
-          Thread.sleep(1000)
-          retrieveHeaders().getOrElse("test", "") match {
-            case "different-thread" => Ok("")
-            case _ => BadRequest(s"test header should be 'different-thread'")
-          }
-        }
-      }
-    }
-
-    def parallel() = Action.async {
-      implicit request => {
-        val id = request.getQueryString("id").getOrElse("")
-        captureHeaders(request.headers)
-        Future.successful {
-          retrieveHeaders().getOrElse("test", "").equals(s"parallel-$id") match {
-            case true => Ok("")
-            case false => BadRequest(s"test header should be 'parallel-$id'")
-          }
-        }
-      }
-    }
-
-    val application = FakeApplication(
-      additionalConfiguration = Map("play.akka.actor.default-dispatcher.type" -> "uk.co.epsilontechnologies.headercontext.ContextPropagatingDispatcherConfigurator"),
-      withRoutes = {
-        case ("GET", "/same-thread") => sameThread()
-        case ("GET", "/different-thread") => differentThread()
-        case ("GET", "/parallel") => parallel()
-      }
-    )
-
-    val server = TestServer(9000, application)
-
     "capture and fetch header values in the same thread" in running(server) {
       await(WS.url("http://localhost:9000/same-thread").withHeaders(("test", "same-thread")).get()).status shouldBe 200
     }
 
-    "capture and fetch header values in a different thread" in running(server) {
+    "capture and fetch header values in different threads" in running(server) {
       await(WS.url("http://localhost:9000/different-thread").withHeaders(("test", "different-thread")).get()).status shouldBe 200
     }
 
@@ -78,6 +31,51 @@ class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContext {
       await(Future.sequence(futures)).foreach(result => result.status shouldBe 200)
     }
 
+  }
+
+  private val server = TestServer(9000, FakeApplication(
+    additionalConfiguration = Map("play.akka.actor.default-dispatcher.type" -> "uk.co.epsilontechnologies.headercontext.ContextPropagatingDispatcherConfigurator"),
+    withRoutes = {
+      case ("GET", "/same-thread") => sameThread()
+      case ("GET", "/different-thread") => differentThread()
+      case ("GET", "/parallel") => parallel()
+    }
+  ))
+
+  private def sameThread() =  Action.async {
+    implicit request => {
+      captureHeaders(request.headers)
+      retrieveHeaders().getOrElse("test", "") match {
+        case "same-thread" => Future(Ok(""))
+        case _ => Future(BadRequest(s"test header should be 'same-thread'"))
+      }
+    }
+  }
+
+  private def differentThread() = Action.async {
+    implicit request => {
+      captureHeaders(request.headers)
+      Future.successful {
+        Thread.sleep(1000)
+        retrieveHeaders().getOrElse("test", "") match {
+          case "different-thread" => Ok("")
+          case _ => BadRequest(s"test header should be 'different-thread'")
+        }
+      }
+    }
+  }
+
+  private def parallel() = Action.async {
+    implicit request => {
+      val id = request.getQueryString("id").getOrElse("")
+      captureHeaders(request.headers)
+      Future.successful {
+        retrieveHeaders().getOrElse("test", "").equals(s"parallel-$id") match {
+          case true => Ok("")
+          case false => BadRequest(s"test header should be 'parallel-$id'")
+        }
+      }
+    }
   }
 
 }
