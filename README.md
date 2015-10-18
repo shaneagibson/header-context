@@ -1,6 +1,7 @@
 # header-context
 
-*header-context* is a Play Framework library for capturing HTTP headers. They can then be accessed for logging or auditing purposes, or for use in subsequent downstream requests.
+*header-context* is a microservice-friendly Play Framework library for capturing HTTP headers. They can then be accessed
+for logging or auditing purposes, or for use in subsequent downstream requests.
 
 Configure the ContextPropagatingDispatcher via:
 ```
@@ -25,3 +26,9 @@ Retrieve headers by invoking:
 ```
 HeaderContext.retrieveHeaders
 ```
+
+### Recommendations
+
+Use of ThreadLocal in an asynchronous application is not ideal. Context should really be passed and maintained
+explicitly, such as via an implicit parameter. Ultimately, if your application requires a lot of state to be maintained
+and subsequently passed downstream via request headers, you might want to reconsider your solution.
