@@ -32,3 +32,5 @@ HeaderContext.retrieveHeaders
 Use of ThreadLocal in an asynchronous application is not ideal. Context should really be passed and maintained
 explicitly, such as via an implicit parameter. Ultimately, if your application requires a lot of state to be maintained
 and subsequently passed downstream via request headers, you might want to reconsider your solution.
+
+Just because this *can* be done, doesn't mean it *should*.
