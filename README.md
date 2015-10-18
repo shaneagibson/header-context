@@ -7,7 +7,7 @@ Configure the ContextPropagatingDispatcher via:
 akka {
     actor {
         default-dispatcher = {
-            type = "monitoring.HeaderPropagatingDispatcherConfigurator"
+            type = "uk.co.epsilontechnologies.headercarrier.HeaderPropagatingDispatcherConfigurator"
         }
     }
 }
