@@ -14,6 +14,8 @@ akka {
 ```
 > Based on some work by Yann Simon - http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework/
 
+### Usage
+
 Capture headers by invoking:
 ```
 HeaderContext.captureHeaders(request.headers)
