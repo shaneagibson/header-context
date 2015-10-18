@@ -1,18 +1,18 @@
 package uk.co.epsilontechnologies.headercarrier
 
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpecLike}
+import org.scalatest.{Matchers, WordSpecLike}
 import play.api.libs.ws.WS
 import play.api.mvc.Action
 import play.api.test.{TestServer, FakeApplication}
 import play.api.test.Helpers._
 import play.api.mvc.Results._
-import uk.co.epsilontechnologies.headercontext.{Context, HeaderContext}
+import uk.co.epsilontechnologies.headercontext.HeaderContext
 
 import scala.concurrent.Future
 import play.api.Play.current
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContext with BeforeAndAfterEach {
+class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContext {
 
   "HeaderContext" should {
 
@@ -78,10 +78,6 @@ class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContext wi
       await(Future.sequence(futures)).foreach(result => result.status shouldBe 200)
     }
 
-  }
-
-  override protected def afterEach() = {
-    Context.clear()
   }
 
 }

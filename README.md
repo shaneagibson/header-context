@@ -22,3 +22,5 @@ Retrieve headers by invoking:
 ```
 HeaderContext.retrieveHeaders
 ```
+
+> Based on some work by Yann Simon - http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework/
