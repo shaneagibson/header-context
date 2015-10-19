@@ -6,13 +6,13 @@ import play.api.mvc.Action
 import play.api.test.{TestServer, FakeApplication}
 import play.api.test.Helpers._
 import play.api.mvc.Results._
-import uk.co.epsilontechnologies.headercontext.HeaderContext
+import uk.co.epsilontechnologies.headercontext.HeaderContextAware
 
 import scala.concurrent.Future
 import play.api.Play.current
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContext {
+class HeaderContextSpec extends WordSpecLike with Matchers with HeaderContextAware {
 
   "HeaderContext" should {
 
