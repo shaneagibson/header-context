@@ -19,12 +19,12 @@ akka {
 
 Capture headers by invoking:
 ```
-HeaderContext.captureHeaders(request.headers)
+HeaderContextAware.captureHeaders(request.headers)
 ```
 
 Retrieve headers by invoking:
 ```
-HeaderContext.retrieveHeaders
+HeaderContextAware.retrieveHeaders
 ```
 
 ### Recommendations
